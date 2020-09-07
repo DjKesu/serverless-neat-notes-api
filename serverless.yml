@@ -15,11 +15,11 @@ provider:
   stage: prod
   region: us-east-2
 
-# These environment variables are made available to our functions
+  # These environment variables are made available to our functions
   # under process.env.
   environment:
     tableName: notes
-    stripeSecretKey: ${env:sk_test_51HNR2bL1HeAIlUZiNVSnpC37cVS7N4FYg2grN4uorjXEk557Ca2bkj3XgGcnZ98rRFwrEQAXjP42U8x3ZPds6LMU00Qzd3YHFf}
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
@@ -34,10 +34,6 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:us-east-2:*:*"
-# Create our resources with separate CloudFormation templates
-resources:
-  # API Gateway Errors
-  - ${file(resources/api-gateway-errors.yml)}
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
@@ -104,3 +100,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+# Create our resources with separate CloudFormation templates
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
